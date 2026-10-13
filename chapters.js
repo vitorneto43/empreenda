@@ -1,1095 +1,166 @@
-// Conteúdo da temporada 1: 40 capítulos. Valores fictícios, para fins didáticos.
-const CHAPTERS_BASE=[
- {title:'A porta se abre',type:'Planejamento',scene:'Você alugou um pequeno ponto para a Cafeteria Aurora. A vizinhança está curiosa, mas o dinheiro inicial precisa durar. Como começar?',choices:[
-  {title:'Investir com moderação e guardar reserva',cost:3000,sales:650,expenses:400,rep:3,lesson:'Capital de giro é a reserva para manter as operações enquanto as vendas crescem.',story:'A abertura foi simples. A reserva financeira deixou você mais tranquilo.'},
-  {title:'Comprar equipamentos de luxo',cost:7500,sales:800,expenses:500,rep:9,lesson:'Bons equipamentos ajudam, mas imobilizar quase todo o caixa aumenta o risco.',story:'Os equipamentos impressionam, mas os próximos boletos assustam.'},
-  {title:'Organizar uma inauguração extravagante',cost:9000,sales:950,expenses:650,rep:12,lesson:'Marketing pode atrair clientes, mas deve respeitar o orçamento.',story:'A cafeteria lotou de curiosos. Agora é preciso pagar o espetáculo.'}]},
- {title:'O preço do primeiro café',type:'Precificação',scene:'O café custa R$ 6 por unidade, incluindo insumos diretos. Você precisa definir um preço que o público aceite e que pague a estrutura.',choices:[
-  {title:'Preço de R$ 12, após pesquisar a vizinhança',cost:150,sales:1700,expenses:850,rep:5,lesson:'Preço exige analisar custos, concorrência, clientes e margem de contribuição.',story:'Os clientes aceitam o preço, e a margem ajuda a pagar as contas.'},
-  {title:'Preço de R$ 7 para atrair todo mundo',cost:150,sales:1400,expenses:1300,rep:8,lesson:'Vender muito com margem pequena pode não sustentar o negócio.',story:'A fila cresce, mas sobra pouquíssimo dinheiro por venda.'},
-  {title:'Preço de R$ 25 sem consultar ninguém',cost:150,sales:450,expenses:450,rep:-10,lesson:'Preço desalinhado à percepção de valor pode derrubar a demanda.',story:'Os clientes reclamam do preço e começam a procurar alternativas.'}]},
- {title:'Um fornecedor bate à porta',type:'Estoque',scene:'Um fornecedor oferece desconto se você comprar ingredientes para seis meses. Existe risco de perdas e vencimento.',choices:[
-  {title:'Comprar somente o necessário para as próximas semanas',cost:400,sales:1500,expenses:850,rep:2,lesson:'Estoque enxuto reduz desperdício e capital parado.',story:'Você repõe com frequência e quase não desperdiça ingredientes.'},
-  {title:'Comprar tudo para ganhar o desconto',cost:3600,sales:1550,expenses:1100,rep:1,lesson:'Desconto não compensa mercadoria estragada e caixa imobilizado.',story:'O depósito fica cheio e parte dos produtos perde validade.'},
-  {title:'Não comprar nada e contar com a sorte',cost:0,sales:200,expenses:300,rep:-12,lesson:'Falta de estoque provoca vendas perdidas e clientes insatisfeitos.',story:'Na hora do almoço, vários itens acabam e os clientes vão embora.'}]},
- {title:'A primeira reclamação',type:'Atendimento',scene:'Uma cliente publicou que recebeu um pedido errado. Outros moradores estão lendo a avaliação.',choices:[
-  {title:'Ouvir, corrigir e treinar a equipe',cost:220,sales:1450,expenses:650,rep:13,lesson:'Resolver falhas e corrigir o processo protege a reputação no longo prazo.',story:'A cliente atualiza a avaliação e elogia sua postura.'},
-  {title:'Ignorar porque foi apenas uma pessoa',cost:0,sales:650,expenses:650,rep:-12,lesson:'Uma reclamação ignorada pode afetar a confiança de novos clientes.',story:'Outras avaliações negativas surgem.'},
-  {title:'Devolver todos os pedidos do dia',cost:2500,sales:1050,expenses:700,rep:6,lesson:'Uma solução desproporcional pode comprometer as finanças sem resolver a causa.',story:'Alguns clientes ficam felizes, mas o caixa sofre.'}]},
- {title:'A proposta de publicidade',type:'Marketing',scene:'Um influenciador oferece divulgação cara. Você ainda não sabe se o público dele mora perto da loja.',choices:[
-  {title:'Testar campanha local com orçamento limitado',cost:300,sales:2000,expenses:900,rep:8,lesson:'Campanhas pequenas permitem medir retorno antes de aumentar o investimento.',story:'A campanha atrai moradores próximos, e você mede as vendas.'},
-  {title:'Investir R$ 4.000 no influenciador',cost:4000,sales:1200,expenses:850,rep:2,lesson:'Alcance não é o mesmo que conversão em vendas.',story:'O vídeo viraliza fora da cidade, mas poucas pessoas visitam a loja.'},
-  {title:'Cortar toda divulgação e esperar',cost:0,sales:700,expenses:650,rep:-3,lesson:'Divulgação consistente ajuda os clientes a descobrir o negócio.',story:'A cafeteria fica tranquila até demais.'}]},
- {title:'Dinheiro da casa ou da empresa?',type:'Finanças',scene:'A cafeteira de casa quebrou. Você pensa em retirar dinheiro do caixa da cafeteria sem registrar.',choices:[
-  {title:'Manter contas separadas e registrar retirada planejada',cost:200,sales:1650,expenses:950,rep:0,lesson:'Separar recursos pessoais e empresariais facilita gestão e tomada de decisões.',story:'Você sabe exatamente quanto a empresa pode gastar.'},
-  {title:'Usar R$ 3.000 do caixa sem registrar',cost:3000,sales:1500,expenses:1050,rep:-3,lesson:'Retiradas sem controle comprometem o capital de giro e distorcem os relatórios.',story:'O saldo diminui e você perde o controle das contas.'},
-  {title:'Ignorar as contas por um mês',cost:1400,sales:850,expenses:1200,rep:-4,lesson:'Registros regulares permitem perceber problemas antes de ficarem graves.',story:'Contas vencem sem você perceber.'}]},
- {title:'O convite para contratar',type:'Pessoas',scene:'O movimento está crescendo. Você precisa escolher como atender melhor sem comprometer a folha de pagamento.',choices:[
-  {title:'Contratar ajuda em horário de pico e acompanhar resultados',cost:400,sales:2350,expenses:1250,rep:10,lesson:'Dimensionar equipe de acordo com a demanda ajuda a equilibrar serviço e custos.',story:'As filas diminuem e os clientes voltam com frequência.'},
-  {title:'Contratar cinco pessoas de uma vez',cost:3200,sales:2250,expenses:1900,rep:6,lesson:'Aumentar custos fixos mais rápido que as receitas é arriscado.',story:'A equipe fica ociosa em boa parte do dia.'},
-  {title:'Trabalhar sozinho e atrasar pedidos',cost:0,sales:750,expenses:550,rep:-13,lesson:'Economizar na equipe pode gerar perdas de vendas e reputação.',story:'Clientes desistem depois de esperar demais.'}]},
- {title:'A tentação de expandir',type:'Estratégia',scene:'Surge um ponto disponível no bairro vizinho. Abrir outra loja seria emocionante — mas sua primeira unidade ainda requer atenção.',choices:[
-  {title:'Melhorar os processos antes de expandir',cost:450,sales:2600,expenses:1100,rep:9,lesson:'Expansão sustentável exige processos estáveis e caixa suficiente.',story:'Você padroniza receitas, compras e atendimento. A loja melhora.'},
-  {title:'Abrir uma filial imediatamente',cost:6500,sales:1950,expenses:1950,rep:4,lesson:'Crescer sem capital e processos suficientes amplia os riscos.',story:'A filial abre, mas as duas lojas disputam o mesmo dinheiro.'},
-  {title:'Fechar mais cedo e parar de inovar',cost:0,sales:700,expenses:850,rep:-7,lesson:'A estagnação também pode prejudicar a competitividade.',story:'Os concorrentes avançam e seu movimento cai.'}]},
- {title:'O mês decisivo',type:'Crises',scene:'Um concorrente abre na rua e os custos sobem. Esta é sua chance de demonstrar gestão sob pressão.',choices:[
-  {title:'Rever custos, manter qualidade e criar fidelidade',cost:350,sales:2900,expenses:1300,rep:13,lesson:'Eficiência e retenção tendem a ser mais sustentáveis que descontos indiscriminados.',story:'Clientes fiéis recomendam a cafeteria, apesar da concorrência.'},
-  {title:'Vender tudo abaixo do custo',cost:150,sales:1800,expenses:2600,rep:4,lesson:'Preços abaixo dos custos por longos períodos podem destruir o negócio.',story:'As filas crescem, mas cada pedido aprofunda o prejuízo.'},
-  {title:'Pegar empréstimo caro e dobrar os gastos',cost:4800,sales:1500,expenses:1700,rep:-4,lesson:'Endividamento sem plano de retorno pode agravar uma crise.',story:'A dívida pesa enquanto o faturamento não acompanha.'}]}
+'use strict';
+// Banco de situações autorais parametrizáveis. Cada temporada possui 100 posições,
+// mas nesta beta os 25 temas retornam em 4 ciclos com números e contexto diferentes.
+const THEMES=[
+ ['A reserva de emergência','Uma despesa não planejada ameaça o capital de giro.','Finanças'],
+ ['O preço praticado','Clientes comparam os preços de {product} com os concorrentes.','Precificação'],
+ ['Uma proposta de fornecimento','A {supplier} oferece desconto por volume em {stock}.','Compras'],
+ ['A reclamação pública','Um dos {client} relatou um problema e outros estão acompanhando.','Atendimento'],
+ ['Campanha publicitária','Surge oportunidade de divulgar {product}, mas o retorno é incerto.','Marketing'],
+ ['Vencimentos desencontrados','Os pagamentos vencem antes do recebimento de parte das vendas.','Caixa'],
+ ['Reforço da equipe','O aumento da demanda está sobrecarregando {team}.','Pessoas'],
+ ['A expansão tentadora','Um novo ponto ou canal de vendas fica disponível.','Expansão'],
+ ['Queda na demanda','As vendas de {product} caem sem aviso.','Demanda'],
+ ['Falha do fornecedor','A {supplier} comunica um atraso importante.','Fornecedores'],
+ ['A proposta de um investidor','Um investidor quer participação na empresa em troca de recursos.','Capital'],
+ ['Controle de qualidade','Uma auditoria aponta retrabalho e desperdício envolvendo {stock}.','Qualidade'],
+ ['O concorrente agressivo','Um concorrente lança promoção difícil de acompanhar.','Concorrência'],
+ ['A parceria inesperada','Outra empresa propõe compartilhar custos e clientes.','Parcerias'],
+ ['Negociação de aluguel','O contrato do imóvel ou instalação será reajustado.','Custos'],
+ ['Pedido grande demais','Um cliente quer comprar muito, com desconto e prazo longo.','Negociação'],
+ ['A equipe insatisfeita','Integrantes da equipe pedem mudanças nas condições de trabalho.','Gestão de pessoas'],
+ ['Problema de operação','Uma falha operacional afeta a entrega de {product}.','Operações'],
+ ['Renovar equipamentos','Máquinas e sistemas estão ficando obsoletos.','Investimentos'],
+ ['Novos canais digitais','Você avalia oferecer {product} por um canal online.','Digital'],
+ ['Uma fiscalização','É necessário revisar registros e obrigações aplicáveis à operação.','Conformidade'],
+ ['Mudança no comportamento do cliente','Os {client} passaram a exigir mais rapidez e informação.','Pesquisa'],
+ ['A negociação com o banco','Uma linha de crédito está disponível, mas tem custos.','Crédito'],
+ ['Reinvestir ou distribuir','Há recursos em caixa e pressões por retiradas.','Estratégia'],
+ ['Fechamento do trimestre','Você precisa escolher prioridades para o próximo período.','Planejamento'],
+
+ ['O pedido antecipado','Um cliente quer reservar {product}, mas oferece sinal menor do que o necessário.','Contratos'],
+ ['O dia de chuva','Uma semana de chuva altera o fluxo esperado de {client}.','Demanda'],
+ ['A conta de energia','A conta de energia subiu e pressiona o custo de operação.','Custos'],
+ ['A compra coletiva','Empresas vizinhas sugerem comprar {stock} em conjunto.','Compras'],
+ ['O produto encalhado','Parte de {stock} permanece sem saída e ocupa capacidade.','Estoque'],
+ ['O treinamento','Um curso pode melhorar o desempenho de {team}, mas exige horas de trabalho.','Pessoas'],
+ ['A avaria inesperada','Um equipamento essencial falha no pior momento do mês.','Manutenção'],
+ ['O contrato anual','Um comprador propõe um contrato de um ano com preços fixos.','Contratos'],
+ ['O cliente influente','Um criador de conteúdo oferece divulgação em troca de benefícios.','Marketing'],
+ ['Mudança de fornecedor','Um novo fornecedor apresenta preço menor, sem histórico comprovado.','Fornecedores'],
+ ['Venda a prazo','Um cliente importante quer prazo superior ao praticado no negócio.','Crédito'],
+ ['A falta de troco','Pequenos problemas no atendimento se acumulam em horários de pico.','Atendimento'],
+ ['Desconto por fidelidade','Clientes frequentes pedem vantagens exclusivas.','Fidelização'],
+ ['Tecnologia no caixa','Um software promete reduzir erros de registro e conciliação.','Sistemas'],
+ ['As metas da equipe','As metas atuais estimulam volume, mas podem prejudicar qualidade.','Pessoas'],
+ ['O estoque de segurança','A equipe quer manter reserva adicional de {stock}.','Estoque'],
+ ['A compra de última hora','Uma demanda súbita exige recompor {stock} a preço maior.','Compras'],
+ ['A proposta do shopping','Surge um espaço com alto movimento e aluguel elevado.','Expansão'],
+ ['Feriado prolongado','Um feriado altera custos e o comportamento de {client}.','Planejamento'],
+ ['O erro no pedido','A equipe registrou incorretamente um pedido relevante.','Qualidade'],
+ ['Os indicadores atrasados','Você percebe que os dados de vendas estão sendo fechados com atraso.','Dados'],
+ ['A queixa recorrente','Diversos clientes mencionam o mesmo ponto fraco do serviço.','Atendimento'],
+ ['O concorrente fechou','Uma empresa vizinha fecha as portas e deixa parte do mercado disponível.','Concorrência'],
+ ['A entrega devolvida','Uma entrega retorna por falha na conferência.','Logística'],
+ ['A pesquisa de satisfação','Você pode entrevistar clientes, mas parte da equipe teme críticas.','Pesquisa'],
+ ['O contrato de manutenção','Uma empresa oferece manutenção preventiva por assinatura.','Manutenção'],
+ ['A nova embalagem','Uma embalagem diferenciada pode valorizar {product} e elevar custos.','Produto'],
+ ['O comprador exigente','Um comprador quer qualidade comprovada e preço baixo.','Negociação'],
+ ['A folga no orçamento','O mês foi melhor que o previsto e sobrou recurso para alocar.','Planejamento'],
+ ['A reunião adiada','Uma negociação foi adiada e isso pode afetar o calendário de recebimentos.','Caixa'],
+ ['A publicidade local','Um veículo local oferece campanha de alcance limitado e preço definido.','Marketing'],
+ ['O novo concorrente digital','Uma operação online passa a atender parte dos seus {client}.','Concorrência'],
+ ['O sistema fora do ar','Um sistema usado na operação está indisponível e afeta pedidos.','Continuidade'],
+ ['A devolução em massa','Um lote apresenta defeitos e ameaça o relacionamento com clientes.','Qualidade'],
+ ['O funcionário experiente','Um profissional-chave recebeu uma oferta de outra empresa.','Pessoas'],
+ ['Excesso de turnos','A equipe relata desgaste com uma sequência de jornadas intensas.','Pessoas'],
+ ['A negociação de tarifas','O provedor de pagamentos oferece um novo contrato de tarifas.','Financeiro'],
+ ['O mix de produtos','Alguns produtos vendem muito, mas contribuem pouco para o resultado.','Portfólio'],
+ ['Mercado sazonal','O setor se aproxima de sua temporada de menor movimento.','Sazonalidade'],
+ ['O contrato informal','Um parceiro sugere iniciar a operação sem formalizar condições.','Governança'],
+ ['A parceria com escolas','Uma instituição da região propõe atender seus alunos e funcionários.','Parcerias'],
+ ['A mudança na legislação','Uma nova obrigação exige revisar procedimentos com apoio especializado.','Conformidade'],
+ ['O custo do desperdício','Sobras e perdas estão acima dos níveis esperados.','Eficiência'],
+ ['O caixa do fim do mês','Recebimentos importantes estão previstos somente para o próximo mês.','Caixa'],
+ ['O novo gerente','É possível delegar parte das decisões para profissional contratado.','Gestão'],
+ ['Troca de endereço','A vizinhança mudou e um novo endereço começa a parecer atraente.','Localização'],
+ ['O investimento em marca','Uma agência sugere renovar nome, fachada e identidade da empresa.','Marketing'],
+ ['Mercadoria em consignação','Um parceiro oferece {stock} para pagamento somente após a venda.','Estoque'],
+ ['O cliente inadimplente','Um comprador atrasou um pagamento que você contava receber.','Cobrança'],
+ ['A escolha do financiamento','Duas opções de capital apresentam prazos e garantias diferentes.','Crédito'],
+ ['O grupo de compras','Empreendedores da região oferecem acesso a novos distribuidores.','Parcerias'],
+ ['Demanda acima do limite','Os pedidos ultrapassam a capacidade atual de {team}.','Capacidade'],
+ ['A oferta de exclusividade','Um fornecedor exige exclusividade em troca de melhores preços.','Estratégia'],
+ ['O bônus por produtividade','A equipe solicita participação nos resultados.','Pessoas'],
+ ['O balanço do semestre','Receitas cresceram, mas o caixa não acompanhou o crescimento.','Financeiro'],
+ ['A auditoria surpresa','Registros e notas fiscais precisam estar prontos para verificação.','Conformidade'],
+ ['O programa de indicação','Clientes satisfeitos podem indicar novos compradores por recompensa.','Aquisição'],
+ ['A ameaça de fraude','Uma transação suspeita chama atenção e pode gerar prejuízo.','Risco'],
+ ['A máquina de segunda mão','Um equipamento usado custa menos, mas sua vida útil é incerta.','Investimento'],
+ ['O aumento de matéria-prima','A alta de preços afeta diretamente a margem dos produtos.','Custos'],
+ ['Venda cruzada','Você identifica uma oportunidade de oferecer produtos complementares.','Vendas'],
+ ['A divergência no inventário','O saldo físico de {stock} não corresponde ao sistema.','Controle'],
+ ['O atendimento por mensagem','Clientes pedem respostas mais rápidas em canais digitais.','Atendimento'],
+ ['O grande evento','Um evento da cidade poderá gerar procura extraordinária.','Demanda'],
+ ['Parceria com influenciador','Um influenciador de nicho oferece conteúdo patrocinado.','Marketing'],
+ ['A oportunidade B2B','Uma empresa oferece compras regulares com margem mais baixa.','Negociação'],
+ ['O novo turno','Um segundo turno pode atender demanda reprimida, mas eleva custos fixos.','Capacidade'],
+ ['Falha de segurança','Um incidente obriga a revisar procedimentos e controles.','Risco'],
+ ['A renegociação da dívida','É possível parcelar um compromisso, mas com encargos adicionais.','Dívida'],
+ ['A cultura da empresa','Você percebe que a equipe desconhece as prioridades do negócio.','Liderança'],
+ ['O teste com produto novo','Uma ideia de novo produto chama atenção, mas não foi validada.','Inovação'],
+ ['A mudança de público','Um novo segmento demonstra interesse por {product}.','Mercado'],
+ ['O fechamento anual','Os resultados exigem decidir entre expansão, consolidação e reservas.','Estratégia'],
+ ['Os números não batem','A conciliação revela diferenças entre vendas registradas e recebidas.','Controles'],
+ ['A sucessão do fornecedor','A empresa que fornece insumos essenciais mudou de gestão.','Fornecedores']
 ];
-const CHAPTERS = [...CHAPTERS_BASE, ...[
-  {
-    "title": "O bilhete de Dona Lúcia",
-    "type": "Relacionamento",
-    "scene": "Dona Lúcia, cliente desde o primeiro dia, diz que o café perdeu o sabor. Seu funcionário Caio percebeu uma mudança nos grãos.",
-    "choices": [
-      {
-        "title": "Investigar os lotes e ouvir Caio",
-        "cost": 180,
-        "sales": 1700,
-        "expenses": 850,
-        "rep": 6,
-        "lesson": "Ouvir clientes e verificar a qualidade antes de alterar o produto.",
-        "story": "Você identificou um lote ruim, negociou uma reposição e reconquistou Dona Lúcia."
-      },
-      {
-        "title": "Desconsiderar a opinião de Dona Lúcia",
-        "cost": 2300,
-        "sales": 850,
-        "expenses": 1000,
-        "rep": -6,
-        "lesson": "Ouvir clientes e verificar a qualidade antes de alterar o produto.",
-        "story": "Dona Lúcia deixa de frequentar a loja e conta aos vizinhos."
-      },
-      {
-        "title": "Trocar de marca sem testar",
-        "cost": 100,
-        "sales": 690,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Ouvir clientes e verificar a qualidade antes de alterar o produto.",
-        "story": "O café novo surpreende alguns, mas afasta clientes habituais."
-      }
-    ]
-  },
-  {
-    "title": "A chuva de terça-feira",
-    "type": "Fluxo de caixa",
-    "scene": "Uma chuva forte esvazia a rua por uma semana. O aluguel vence sexta-feira e a equipe espera o pagamento.",
-    "choices": [
-      {
-        "title": "Rever gastos e oferecer encomendas",
-        "cost": 245,
-        "sales": 1890,
-        "expenses": 950,
-        "rep": 7,
-        "lesson": "Custos fixos continuam existindo mesmo quando a demanda diminui.",
-        "story": "A campanha de encomendas reduz o impacto da chuva."
-      },
-      {
-        "title": "Esperar o sol sem mudar nada",
-        "cost": 2750,
-        "sales": 940,
-        "expenses": 1120,
-        "rep": -7,
-        "lesson": "Custos fixos continuam existindo mesmo quando a demanda diminui.",
-        "story": "O caixa cai enquanto as despesas seguem chegando."
-      },
-      {
-        "title": "Usar toda a reserva em anúncios",
-        "cost": 400,
-        "sales": 810,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Custos fixos continuam existindo mesmo quando a demanda diminui.",
-        "story": "Os anúncios atraem atenção, mas o gasto esgota a proteção financeira."
-      }
-    ]
-  },
-  {
-    "title": "O contrato de Sérgio",
-    "type": "Fornecedores",
-    "scene": "Sérgio, um distribuidor novo, propõe preço baixo se a Aurora assinar exclusividade de um ano. Há multa de saída.",
-    "choices": [
-      {
-        "title": "Negociar teste curto com indicadores",
-        "cost": 310,
-        "sales": 2080,
-        "expenses": 1050,
-        "rep": 8,
-        "lesson": "Contratos devem equilibrar preço, qualidade, prazo e flexibilidade.",
-        "story": "O teste revela a qualidade do serviço sem comprometer o futuro."
-      },
-      {
-        "title": "Assinar sem ler para aproveitar desconto",
-        "cost": 3200,
-        "sales": 1030,
-        "expenses": 1240,
-        "rep": -8,
-        "lesson": "Contratos devem equilibrar preço, qualidade, prazo e flexibilidade.",
-        "story": "Você fica preso a entregas inconsistentes e a uma multa elevada."
-      },
-      {
-        "title": "Recusar qualquer negociação",
-        "cost": 700,
-        "sales": 930,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Contratos devem equilibrar preço, qualidade, prazo e flexibilidade.",
-        "story": "Você evita risco, mas deixa passar a chance de melhorar as compras."
-      }
-    ]
-  },
-  {
-    "title": "A fila da escola",
-    "type": "Operação",
-    "scene": "A escola próxima começa a liberar alunos às 16h e o movimento cresce. A fila provoca atrasos e pedidos errados.",
-    "choices": [
-      {
-        "title": "Organizar fila e pré-preparar itens",
-        "cost": 375,
-        "sales": 2270,
-        "expenses": 1150,
-        "rep": 6,
-        "lesson": "Capacidade operacional deve acompanhar a demanda.",
-        "story": "Os pedidos saem no horário e a equipe respira aliviada."
-      },
-      {
-        "title": "Aumentar preços apenas no horário de pico",
-        "cost": 3650,
-        "sales": 1120,
-        "expenses": 1000,
-        "rep": -9,
-        "lesson": "Capacidade operacional deve acompanhar a demanda.",
-        "story": "Parte dos estudantes para de visitar a loja."
-      },
-      {
-        "title": "Aceitar pedidos além da capacidade",
-        "cost": 100,
-        "sales": 1050,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Capacidade operacional deve acompanhar a demanda.",
-        "story": "Os erros se acumulam e os reembolsos aumentam."
-      }
-    ]
-  },
-  {
-    "title": "O sumiço dos copos",
-    "type": "Controle",
-    "scene": "A contagem semanal mostra que faltam dezenas de copos descartáveis. Você não sabe se houve perdas ou erro de registro.",
-    "choices": [
-      {
-        "title": "Implantar controle de entradas e saídas",
-        "cost": 440,
-        "sales": 2460,
-        "expenses": 850,
-        "rep": 7,
-        "lesson": "Inventário e apuração de fatos são melhores que suposições.",
-        "story": "O registro revela falha de armazenagem e reduz desperdícios."
-      },
-      {
-        "title": "Acusar publicamente um funcionário",
-        "cost": 2300,
-        "sales": 1210,
-        "expenses": 1120,
-        "rep": -6,
-        "lesson": "Inventário e apuração de fatos são melhores que suposições.",
-        "story": "A equipe perde confiança e o clima piora sem resolver a causa."
-      },
-      {
-        "title": "Ignorar porque os copos são baratos",
-        "cost": 400,
-        "sales": 690,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Inventário e apuração de fatos são melhores que suposições.",
-        "story": "As perdas se repetem e começam a pesar no orçamento."
-      }
-    ]
-  },
-  {
-    "title": "Caio quer aprender",
-    "type": "Pessoas",
-    "scene": "Caio, atendente da Aurora, pede treinamento para operar a máquina de espresso. Você precisa decidir como desenvolver a equipe.",
-    "choices": [
-      {
-        "title": "Treinar Caio em horários planejados",
-        "cost": 180,
-        "sales": 2650,
-        "expenses": 950,
-        "rep": 8,
-        "lesson": "Treinamento é investimento quando alinhado ao trabalho.",
-        "story": "Caio melhora a qualidade e sente que pode crescer."
-      },
-      {
-        "title": "Negar qualquer oportunidade de treinamento",
-        "cost": 2750,
-        "sales": 850,
-        "expenses": 1240,
-        "rep": -7,
-        "lesson": "Treinamento é investimento quando alinhado ao trabalho.",
-        "story": "Caio fica desmotivado e começa a procurar outro emprego."
-      },
-      {
-        "title": "Promover Caio sem acompanhamento",
-        "cost": 700,
-        "sales": 810,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Treinamento é investimento quando alinhado ao trabalho.",
-        "story": "Erros operacionais aparecem porque faltou preparação."
-      }
-    ]
-  },
-  {
-    "title": "Um concorrente abre ao lado",
-    "type": "Concorrência",
-    "scene": "Uma rede inaugura na mesma rua com promoções agressivas e anúncios por toda a cidade.",
-    "choices": [
-      {
-        "title": "Reforçar atendimento e produtos autorais",
-        "cost": 245,
-        "sales": 1700,
-        "expenses": 1050,
-        "rep": 6,
-        "lesson": "Diferenciação sustentável é mais sólida que guerra de preços.",
-        "story": "Os clientes valorizam o atendimento e as receitas próprias."
-      },
-      {
-        "title": "Cortar preços abaixo do custo",
-        "cost": 3200,
-        "sales": 940,
-        "expenses": 1000,
-        "rep": -8,
-        "lesson": "Diferenciação sustentável é mais sólida que guerra de preços.",
-        "story": "O volume sobe, mas a margem desaba."
-      },
-      {
-        "title": "Espalhar boatos sobre a rede",
-        "cost": 100,
-        "sales": 930,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Diferenciação sustentável é mais sólida que guerra de preços.",
-        "story": "A reputação da Aurora sofre com a postura antiética."
-      }
-    ]
-  },
-  {
-    "title": "O bolo de Teresa",
-    "type": "Parcerias",
-    "scene": "Teresa, confeiteira do bairro, quer fornecer bolos artesanais. Seus produtos são elogiados, mas os prazos variam.",
-    "choices": [
-      {
-        "title": "Fazer piloto com metas de entrega",
-        "cost": 310,
-        "sales": 1890,
-        "expenses": 1150,
-        "rep": 7,
-        "lesson": "Projetos-piloto reduzem riscos de novas parcerias.",
-        "story": "A parceria funciona em pequena escala e atrai novos clientes."
-      },
-      {
-        "title": "Comprar grande volume sem testar",
-        "cost": 3650,
-        "sales": 1030,
-        "expenses": 1120,
-        "rep": -9,
-        "lesson": "Projetos-piloto reduzem riscos de novas parcerias.",
-        "story": "Entregas atrasam e bolos vencem no estoque."
-      },
-      {
-        "title": "Dispensar Teresa sem conversar",
-        "cost": 400,
-        "sales": 1050,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Projetos-piloto reduzem riscos de novas parcerias.",
-        "story": "A Aurora perde uma oportunidade de criar produtos exclusivos."
-      }
-    ]
-  },
-  {
-    "title": "O balanço que não fecha",
-    "type": "Finanças",
-    "scene": "Seu relatório mostra vendas maiores que o dinheiro no caixa. O problema pode estar nas taxas de cartão e recebíveis.",
-    "choices": [
-      {
-        "title": "Conferir vendas, taxas e prazos de recebimento",
-        "cost": 375,
-        "sales": 2080,
-        "expenses": 850,
-        "rep": 8,
-        "lesson": "Faturamento, lucro e caixa são conceitos diferentes.",
-        "story": "Você descobre taxas e parcelamentos antes de gastar o que ainda não recebeu."
-      },
-      {
-        "title": "Tratar todo faturamento como dinheiro disponível",
-        "cost": 2300,
-        "sales": 1120,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Faturamento, lucro e caixa são conceitos diferentes.",
-        "story": "Faltam recursos para pagamentos que você considerava cobertos."
-      },
-      {
-        "title": "Apagar registros e recomeçar",
-        "cost": 700,
-        "sales": 690,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Faturamento, lucro e caixa são conceitos diferentes.",
-        "story": "Os dados se perdem e fica difícil encontrar o erro."
-      }
-    ]
-  },
-  {
-    "title": "A quinta-feira do bairro",
-    "type": "Marketing",
-    "scene": "A associação de moradores propõe uma feira local. A taxa de participação é pequena e o público costuma ser da região.",
-    "choices": [
-      {
-        "title": "Participar e medir clientes que retornam",
-        "cost": 440,
-        "sales": 2270,
-        "expenses": 950,
-        "rep": 6,
-        "lesson": "Marketing local precisa de objetivo e medição.",
-        "story": "A Aurora atrai novos vizinhos e mede o retorno da feira."
-      },
-      {
-        "title": "Montar estande caríssimo e oferecer tudo grátis",
-        "cost": 2750,
-        "sales": 1210,
-        "expenses": 1000,
-        "rep": -7,
-        "lesson": "Marketing local precisa de objetivo e medição.",
-        "story": "O movimento aumenta, mas o gasto supera as vendas."
-      },
-      {
-        "title": "Ignorar qualquer evento comunitário",
-        "cost": 100,
-        "sales": 810,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Marketing local precisa de objetivo e medição.",
-        "story": "A cafeteria perde visibilidade para outros estabelecimentos locais."
-      }
-    ]
-  },
-  {
-    "title": "A promoção dos três cafés",
-    "type": "Precificação",
-    "scene": "Sua equipe sugere desconto para quem comprar três cafés. É preciso preservar a margem e controlar a promoção.",
-    "choices": [
-      {
-        "title": "Calcular margem e limitar duração",
-        "cost": 180,
-        "sales": 2460,
-        "expenses": 1050,
-        "rep": 7,
-        "lesson": "Promoções precisam considerar margem de contribuição.",
-        "story": "O pacote aumenta o ticket médio sem comprometer o resultado."
-      },
-      {
-        "title": "Dar 70% de desconto sem analisar custos",
-        "cost": 3200,
-        "sales": 850,
-        "expenses": 1120,
-        "rep": -8,
-        "lesson": "Promoções precisam considerar margem de contribuição.",
-        "story": "A oferta fica popular, mas gera perda por venda."
-      },
-      {
-        "title": "Nunca testar nenhum pacote",
-        "cost": 400,
-        "sales": 930,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Promoções precisam considerar margem de contribuição.",
-        "story": "A concorrência testa ofertas enquanto a Aurora fica parada."
-      }
-    ]
-  },
-  {
-    "title": "O freezer parou",
-    "type": "Crises",
-    "scene": "Às seis da manhã, o freezer falha. Há alimentos que podem ter sido afetados e pedidos agendados para hoje.",
-    "choices": [
-      {
-        "title": "Descartar produtos inseguros e ajustar cardápio",
-        "cost": 245,
-        "sales": 2650,
-        "expenses": 1150,
-        "rep": 8,
-        "lesson": "Segurança alimentar deve prevalecer sobre ganhos imediatos.",
-        "story": "Você protege clientes e comunica a mudança com transparência."
-      },
-      {
-        "title": "Vender mesmo sem saber se estão seguros",
-        "cost": 3650,
-        "sales": 940,
-        "expenses": 1240,
-        "rep": -9,
-        "lesson": "Segurança alimentar deve prevalecer sobre ganhos imediatos.",
-        "story": "Clientes passam mal na narrativa e a reputação despenca."
-      },
-      {
-        "title": "Comprar equipamento caro sem orçamento",
-        "cost": 700,
-        "sales": 1050,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Segurança alimentar deve prevalecer sobre ganhos imediatos.",
-        "story": "O equipamento novo funciona, mas o caixa fica perigosamente baixo."
-      }
-    ]
-  },
-  {
-    "title": "O domingo das contas",
-    "type": "Planejamento",
-    "scene": "O movimento cresceu, mas ninguém consegue explicar quais produtos realmente dão lucro. É hora de analisar o mix de vendas.",
-    "choices": [
-      {
-        "title": "Comparar margem e volume de cada produto",
-        "cost": 310,
-        "sales": 1700,
-        "expenses": 850,
-        "rep": 6,
-        "lesson": "Mix de produtos deve ser avaliado pela contribuição ao resultado.",
-        "story": "Você ajusta o cardápio e melhora o resultado total."
-      },
-      {
-        "title": "Olhar só os itens mais vendidos",
-        "cost": 2300,
-        "sales": 1030,
-        "expenses": 1000,
-        "rep": -6,
-        "lesson": "Mix de produtos deve ser avaliado pela contribuição ao resultado.",
-        "story": "Itens populares escondem custos altos e reduzem o lucro."
-      },
-      {
-        "title": "Retirar os itens de menor preço sem analisar",
-        "cost": 100,
-        "sales": 690,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Mix de produtos deve ser avaliado pela contribuição ao resultado.",
-        "story": "Alguns itens baratos eram rentáveis e clientes ficam insatisfeitos."
-      }
-    ]
-  },
-  {
-    "title": "O cliente corporativo",
-    "type": "Negociação",
-    "scene": "Uma empresa quer 100 cafés por semana, mas exige preço menor, entrega pontual e nota fiscal.",
-    "choices": [
-      {
-        "title": "Calcular capacidade e negociar contrato viável",
-        "cost": 375,
-        "sales": 1890,
-        "expenses": 950,
-        "rep": 7,
-        "lesson": "Contratos grandes exigem análise de margem e execução.",
-        "story": "Você assina um acordo que considera capacidade, custo e prazo."
-      },
-      {
-        "title": "Aceitar preço que não paga custos",
-        "cost": 2750,
-        "sales": 1120,
-        "expenses": 1120,
-        "rep": -7,
-        "lesson": "Contratos grandes exigem análise de margem e execução.",
-        "story": "A demanda cresce, mas o contrato gera prejuízo recorrente."
-      },
-      {
-        "title": "Recusar antes de conhecer os detalhes",
-        "cost": 400,
-        "sales": 810,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Contratos grandes exigem análise de margem e execução.",
-        "story": "A Aurora perde uma fonte potencial de receita estável."
-      }
-    ]
-  },
-  {
-    "title": "Mudança no aluguel",
-    "type": "Risco",
-    "scene": "A proprietária do imóvel anuncia reajuste para a renovação do contrato. Você tem dois meses para se preparar.",
-    "choices": [
-      {
-        "title": "Projetar cenários e negociar com antecedência",
-        "cost": 440,
-        "sales": 2080,
-        "expenses": 1050,
-        "rep": 8,
-        "lesson": "Antecipação permite negociar riscos e custos fixos.",
-        "story": "A negociação oferece prazo e permite ajustar o orçamento."
-      },
-      {
-        "title": "Assinar qualquer valor sem fazer contas",
-        "cost": 3200,
-        "sales": 1210,
-        "expenses": 1240,
-        "rep": -8,
-        "lesson": "Antecipação permite negociar riscos e custos fixos.",
-        "story": "O aluguel passa a comprometer parte excessiva da receita."
-      },
-      {
-        "title": "Ignorar o aviso até o vencimento",
-        "cost": 700,
-        "sales": 930,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Antecipação permite negociar riscos e custos fixos.",
-        "story": "A falta de planejamento torna a renovação mais difícil."
-      }
-    ]
-  },
-  {
-    "title": "A mensagem viral",
-    "type": "Reputação",
-    "scene": "Um vídeo mostra uma fila longa na Aurora, mas sugere que a loja não respeita clientes. O vídeo viralizou no bairro.",
-    "choices": [
-      {
-        "title": "Reconhecer espera e explicar melhorias concretas",
-        "cost": 180,
-        "sales": 2270,
-        "expenses": 1150,
-        "rep": 6,
-        "lesson": "Comunicação transparente e correções reais constroem confiança.",
-        "story": "O público percebe a resposta e a fila passa a andar melhor."
-      },
-      {
-        "title": "Atacar publicamente quem postou",
-        "cost": 3650,
-        "sales": 850,
-        "expenses": 1000,
-        "rep": -9,
-        "lesson": "Comunicação transparente e correções reais constroem confiança.",
-        "story": "A discussão cresce e afasta clientes."
-      },
-      {
-        "title": "Comprar avaliações positivas falsas",
-        "cost": 100,
-        "sales": 1050,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Comunicação transparente e correções reais constroem confiança.",
-        "story": "O esquema é descoberto e a confiança desaba."
-      }
-    ]
-  },
-  {
-    "title": "A planilha de Teresa",
-    "type": "Indicadores",
-    "scene": "Teresa propõe revisar semanalmente quatro números: faturamento, margem, desperdício e clientes recorrentes.",
-    "choices": [
-      {
-        "title": "Criar painel pequeno com indicadores úteis",
-        "cost": 245,
-        "sales": 2460,
-        "expenses": 850,
-        "rep": 7,
-        "lesson": "Poucos indicadores bem utilizados ajudam mais que dados sem ação.",
-        "story": "O painel mostra perdas cedo e facilita decisões."
-      },
-      {
-        "title": "Medir dezenas de números sem rotina",
-        "cost": 2300,
-        "sales": 940,
-        "expenses": 1120,
-        "rep": -6,
-        "lesson": "Poucos indicadores bem utilizados ajudam mais que dados sem ação.",
-        "story": "A equipe gasta tempo registrando métricas sem agir."
-      },
-      {
-        "title": "Evitar números para confiar na intuição",
-        "cost": 400,
-        "sales": 690,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Poucos indicadores bem utilizados ajudam mais que dados sem ação.",
-        "story": "Problemas só aparecem quando o caixa já caiu."
-      }
-    ]
-  },
-  {
-    "title": "Hora da entrega",
-    "type": "Canais de venda",
-    "scene": "Um aplicativo de entregas oferece novos clientes, mas cobra comissão sobre cada pedido.",
-    "choices": [
-      {
-        "title": "Testar delivery com preço e embalagem calculados",
-        "cost": 310,
-        "sales": 2650,
-        "expenses": 950,
-        "rep": 8,
-        "lesson": "Cada canal tem custos e margens próprios.",
-        "story": "O canal adicional funciona nos produtos com margem adequada."
-      },
-      {
-        "title": "Cobrar o mesmo valor sem contar taxas",
-        "cost": 2750,
-        "sales": 1030,
-        "expenses": 1240,
-        "rep": -7,
-        "lesson": "Cada canal tem custos e margens próprios.",
-        "story": "As comissões consomem o ganho esperado."
-      },
-      {
-        "title": "Parar de atender presencialmente",
-        "cost": 700,
-        "sales": 810,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Cada canal tem custos e margens próprios.",
-        "story": "Clientes antigos ficam frustrados com a mudança brusca."
-      }
-    ]
-  },
-  {
-    "title": "O feriado prolongado",
-    "type": "Demanda",
-    "scene": "Haverá um feriado de quatro dias. A região pode ficar vazia ou receber visitantes, e você precisa comprar insumos.",
-    "choices": [
-      {
-        "title": "Usar histórico e montar estoque flexível",
-        "cost": 375,
-        "sales": 1700,
-        "expenses": 1050,
-        "rep": 6,
-        "lesson": "Previsões devem considerar cenários e margens de erro.",
-        "story": "Você ajusta pedidos conforme sinais de demanda e evita perdas."
-      },
-      {
-        "title": "Dobrar compras por impulso",
-        "cost": 3200,
-        "sales": 1120,
-        "expenses": 1000,
-        "rep": -8,
-        "lesson": "Previsões devem considerar cenários e margens de erro.",
-        "story": "Parte dos produtos vence depois do movimento menor que o esperado."
-      },
-      {
-        "title": "Fechar sem avaliar oportunidade",
-        "cost": 100,
-        "sales": 930,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Previsões devem considerar cenários e margens de erro.",
-        "story": "Turistas encontram a cafeteria fechada e vão a concorrentes."
-      }
-    ]
-  },
-  {
-    "title": "Caio pede aumento",
-    "type": "Pessoas",
-    "scene": "Caio agora é um dos funcionários mais experientes e pede aumento. O caixa permite ajustes modestos, mas não promessas ilimitadas.",
-    "choices": [
-      {
-        "title": "Avaliar desempenho e negociar plano viável",
-        "cost": 440,
-        "sales": 1890,
-        "expenses": 1150,
-        "rep": 7,
-        "lesson": "Gestão de pessoas exige respeito e sustentabilidade financeira.",
-        "story": "Caio entende os critérios e ajuda a melhorar processos."
-      },
-      {
-        "title": "Prometer valor que não cabe no orçamento",
-        "cost": 3650,
-        "sales": 1210,
-        "expenses": 1120,
-        "rep": -9,
-        "lesson": "Gestão de pessoas exige respeito e sustentabilidade financeira.",
-        "story": "A folha aumenta mais que as receitas."
-      },
-      {
-        "title": "Recusar e humilhar Caio na frente de todos",
-        "cost": 400,
-        "sales": 1050,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Gestão de pessoas exige respeito e sustentabilidade financeira.",
-        "story": "A equipe perde confiança na liderança."
-      }
-    ]
-  },
-  {
-    "title": "Uma nova máquina",
-    "type": "Investimento",
-    "scene": "Uma máquina automatizada promete acelerar pedidos. O fabricante oferece financiamento e apresenta números otimistas.",
-    "choices": [
-      {
-        "title": "Calcular retorno e testar capacidade",
-        "cost": 180,
-        "sales": 2080,
-        "expenses": 850,
-        "rep": 8,
-        "lesson": "Investimentos devem ser avaliados pelo retorno esperado e pelo risco.",
-        "story": "Você descobre quando o investimento realmente se paga."
-      },
-      {
-        "title": "Financiar sem conferir os números",
-        "cost": 2300,
-        "sales": 850,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Investimentos devem ser avaliados pelo retorno esperado e pelo risco.",
-        "story": "As parcelas pressionam o caixa antes de a máquina gerar retorno."
-      },
-      {
-        "title": "Rejeitar toda tecnologia automaticamente",
-        "cost": 700,
-        "sales": 690,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Investimentos devem ser avaliados pelo retorno esperado e pelo risco.",
-        "story": "O tempo de espera continua alto e limita o crescimento."
-      }
-    ]
-  },
-  {
-    "title": "O estoque de inverno",
-    "type": "Estoque",
-    "scene": "Uma frente fria aumenta a procura por bebidas quentes. O estoque de chocolate e café precisa acompanhar a mudança.",
-    "choices": [
-      {
-        "title": "Repor gradualmente e acompanhar vendas",
-        "cost": 245,
-        "sales": 2270,
-        "expenses": 950,
-        "rep": 6,
-        "lesson": "Compras devem responder a dados e à sazonalidade.",
-        "story": "A Aurora aproveita o clima e evita desperdício."
-      },
-      {
-        "title": "Comprar estoque para seis meses",
-        "cost": 2750,
-        "sales": 940,
-        "expenses": 1000,
-        "rep": -7,
-        "lesson": "Compras devem responder a dados e à sazonalidade.",
-        "story": "A previsão exagerada deixa produtos parados por meses."
-      },
-      {
-        "title": "Manter cardápio igual e ignorar a demanda",
-        "cost": 100,
-        "sales": 810,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Compras devem responder a dados e à sazonalidade.",
-        "story": "Clientes procuram outras lojas com opções para o frio."
-      }
-    ]
-  },
-  {
-    "title": "O erro no pedido grande",
-    "type": "Atendimento",
-    "scene": "A encomenda corporativa saiu incompleta. O cliente precisa de uma resposta antes da reunião começar.",
-    "choices": [
-      {
-        "title": "Assumir falha e entregar correção possível",
-        "cost": 310,
-        "sales": 2460,
-        "expenses": 1050,
-        "rep": 7,
-        "lesson": "Recuperação de serviço exige responsabilidade e agilidade.",
-        "story": "O cliente aprecia a rapidez e mantém a parceria."
-      },
-      {
-        "title": "Culpar a equipe sem falar com o cliente",
-        "cost": 3200,
-        "sales": 1030,
-        "expenses": 1120,
-        "rep": -8,
-        "lesson": "Recuperação de serviço exige responsabilidade e agilidade.",
-        "story": "A equipe fica ressentida e o cliente sem solução."
-      },
-      {
-        "title": "Esconder o problema até alguém reclamar",
-        "cost": 400,
-        "sales": 930,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Recuperação de serviço exige responsabilidade e agilidade.",
-        "story": "O atraso na comunicação agrava a perda de confiança."
-      }
-    ]
-  },
-  {
-    "title": "A escolha da filial",
-    "type": "Expansão",
-    "scene": "O corretor oferece um ponto no centro com alto fluxo, mas exige caução e aluguel elevados.",
-    "choices": [
-      {
-        "title": "Validar demanda e simular cenários antes",
-        "cost": 375,
-        "sales": 2650,
-        "expenses": 1150,
-        "rep": 8,
-        "lesson": "Antes de expandir, teste demanda e capital necessário.",
-        "story": "A Aurora aprende sobre o local antes de assumir custos."
-      },
-      {
-        "title": "Assinar imediatamente por medo de perder",
-        "cost": 3650,
-        "sales": 1120,
-        "expenses": 1240,
-        "rep": -9,
-        "lesson": "Antes de expandir, teste demanda e capital necessário.",
-        "story": "O contrato compromete o caixa e a margem de segurança."
-      },
-      {
-        "title": "Abrir filial sem capital de giro",
-        "cost": 700,
-        "sales": 1050,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Antes de expandir, teste demanda e capital necessário.",
-        "story": "A nova unidade abre sem recursos para o primeiro trimestre."
-      }
-    ]
-  },
-  {
-    "title": "O programa de fidelidade",
-    "type": "Retenção",
-    "scene": "Dona Lúcia sugere um cartão de pontos para incentivar a volta dos clientes. A equipe tem receio de dar descontos demais.",
-    "choices": [
-      {
-        "title": "Criar benefício sustentável e medir retorno",
-        "cost": 440,
-        "sales": 1700,
-        "expenses": 850,
-        "rep": 6,
-        "lesson": "Fidelização deve gerar valor sem eliminar margem.",
-        "story": "Clientes voltam com frequência e a margem permanece saudável."
-      },
-      {
-        "title": "Dar café grátis a cada compra",
-        "cost": 2300,
-        "sales": 1210,
-        "expenses": 1000,
-        "rep": -6,
-        "lesson": "Fidelização deve gerar valor sem eliminar margem.",
-        "story": "A promoção compromete os custos de atendimento."
-      },
-      {
-        "title": "Ignorar clientes recorrentes",
-        "cost": 100,
-        "sales": 690,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Fidelização deve gerar valor sem eliminar margem.",
-        "story": "Alguns clientes fiéis mudam para a cafeteria rival."
-      }
-    ]
-  },
-  {
-    "title": "O mês do imposto",
-    "type": "Conformidade",
-    "scene": "As obrigações fiscais se aproximam. Você percebe que misturou comprovantes pessoais e empresariais.",
-    "choices": [
-      {
-        "title": "Organizar documentos e buscar orientação contábil",
-        "cost": 180,
-        "sales": 1890,
-        "expenses": 950,
-        "rep": 7,
-        "lesson": "Conformidade e documentação são partes da gestão responsável.",
-        "story": "Você regulariza os registros e evita surpresas."
-      },
-      {
-        "title": "Não registrar vendas para reduzir tributos",
-        "cost": 2750,
-        "sales": 850,
-        "expenses": 1120,
-        "rep": -7,
-        "lesson": "Conformidade e documentação são partes da gestão responsável.",
-        "story": "A conduta irregular cria riscos legais e financeiros."
-      },
-      {
-        "title": "Deixar tudo para depois do prazo",
-        "cost": 400,
-        "sales": 810,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Conformidade e documentação são partes da gestão responsável.",
-        "story": "Juros, multas e retrabalho pesam no orçamento."
-      }
-    ]
-  },
-  {
-    "title": "A equipe está cansada",
-    "type": "Liderança",
-    "scene": "Depois de meses intensos, surgem erros e faltas. Caio conta que a escala ficou desgastante.",
-    "choices": [
-      {
-        "title": "Reorganizar turnos e ouvir a equipe",
-        "cost": 245,
-        "sales": 2080,
-        "expenses": 1050,
-        "rep": 8,
-        "lesson": "Bem-estar e processos sustentáveis apoiam produtividade.",
-        "story": "O ambiente melhora e os erros diminuem."
-      },
-      {
-        "title": "Exigir horas extras indefinidamente",
-        "cost": 3200,
-        "sales": 940,
-        "expenses": 1240,
-        "rep": -8,
-        "lesson": "Bem-estar e processos sustentáveis apoiam produtividade.",
-        "story": "A rotatividade aumenta e a loja perde experiência."
-      },
-      {
-        "title": "Premiar só a velocidade, sem qualidade",
-        "cost": 700,
-        "sales": 930,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Bem-estar e processos sustentáveis apoiam produtividade.",
-        "story": "Pedidos saem rápidos, mas as falhas afastam consumidores."
-      }
-    ]
-  },
-  {
-    "title": "O investidor misterioso",
-    "type": "Financiamento",
-    "scene": "Um investidor oferece recursos para abrir duas lojas, mas quer participação elevada e controle sobre decisões importantes.",
-    "choices": [
-      {
-        "title": "Analisar termos e comparar alternativas",
-        "cost": 310,
-        "sales": 2270,
-        "expenses": 1150,
-        "rep": 6,
-        "lesson": "Capital externo tem preço, condições e impactos na governança.",
-        "story": "Você negocia com clareza sobre controle e retorno."
-      },
-      {
-        "title": "Assinar sem ler o acordo",
-        "cost": 3650,
-        "sales": 1030,
-        "expenses": 1000,
-        "rep": -9,
-        "lesson": "Capital externo tem preço, condições e impactos na governança.",
-        "story": "O capital entra, mas você perde autonomia sobre a operação."
-      },
-      {
-        "title": "Rejeitar sem considerar cenário algum",
-        "cost": 100,
-        "sales": 1050,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Capital externo tem preço, condições e impactos na governança.",
-        "story": "A oportunidade pode ser boa, mas fica sem análise."
-      }
-    ]
-  },
-  {
-    "title": "O relatório anual",
-    "type": "Análise",
-    "scene": "Chegou o fim do ano. Você precisa descobrir se houve crescimento saudável ou só mais movimentação.",
-    "choices": [
-      {
-        "title": "Comparar lucro, caixa, clientes e custos",
-        "cost": 375,
-        "sales": 2460,
-        "expenses": 850,
-        "rep": 7,
-        "lesson": "Empresas precisam avaliar resultado, liquidez e qualidade do crescimento.",
-        "story": "O relatório revela avanços e pontos que ainda precisam melhorar."
-      },
-      {
-        "title": "Avaliar sucesso apenas pelo faturamento",
-        "cost": 2300,
-        "sales": 1120,
-        "expenses": 1120,
-        "rep": -6,
-        "lesson": "Empresas precisam avaliar resultado, liquidez e qualidade do crescimento.",
-        "story": "Você confunde volume de vendas com sustentabilidade."
-      },
-      {
-        "title": "Comemorar sem revisar resultados",
-        "cost": 400,
-        "sales": 690,
-        "expenses": 1070,
-        "rep": -5,
-        "lesson": "Empresas precisam avaliar resultado, liquidez e qualidade do crescimento.",
-        "story": "Problemas permanecem escondidos até o próximo ciclo."
-      }
-    ]
-  },
-  {
-    "title": "A grande decisão",
-    "type": "Estratégia",
-    "scene": "A Aurora chegou a uma encruzilhada: crescer com cuidado, apostar tudo em expansão ou manter operações sem melhorias.",
-    "choices": [
-      {
-        "title": "Consolidar operação lucrativa e expansão gradual",
-        "cost": 440,
-        "sales": 2650,
-        "expenses": 950,
-        "rep": 8,
-        "lesson": "Uma estratégia deve conectar recursos disponíveis a objetivos reais.",
-        "story": "A Aurora fortalece sua base e prepara um futuro sustentável."
-      },
-      {
-        "title": "Abrir três filiais com dívida elevada",
-        "cost": 2750,
-        "sales": 1210,
-        "expenses": 1240,
-        "rep": -7,
-        "lesson": "Uma estratégia deve conectar recursos disponíveis a objetivos reais.",
-        "story": "Os custos fixos crescem mais rápido que as receitas."
-      },
-      {
-        "title": "Parar de investir em melhoria e atendimento",
-        "cost": 700,
-        "sales": 810,
-        "expenses": 1240,
-        "rep": -6,
-        "lesson": "Uma estratégia deve conectar recursos disponíveis a objetivos reais.",
-        "story": "O negócio sobrevive, mas perde competitividade aos poucos."
-      }
-    ]
-  },
-  {
-    "title": "O destino da Aurora",
-    "type": "Conclusão",
-    "scene": "Dona Lúcia, Caio e Teresa se reúnem para celebrar o aniversário da cafeteria. O futuro depende do histórico de suas escolhas.",
-    "choices": [
-      {
-        "title": "Reinvestir parte do lucro e guardar reserva",
-        "cost": 180,
-        "sales": 1700,
-        "expenses": 1050,
-        "rep": 6,
-        "lesson": "Lucro sustentável requer disciplina também nos bons momentos.",
-        "story": "Você comemora preservando recursos para o próximo ciclo."
-      },
-      {
-        "title": "Retirar todo o caixa como recompensa",
-        "cost": 3200,
-        "sales": 850,
-        "expenses": 1000,
-        "rep": -8,
-        "lesson": "Lucro sustentável requer disciplina também nos bons momentos.",
-        "story": "A empresa fica vulnerável a qualquer imprevisto."
-      },
-      {
-        "title": "Fazer uma festa caríssima financiada",
-        "cost": 100,
-        "sales": 930,
-        "expenses": 900,
-        "rep": -4,
-        "lesson": "Lucro sustentável requer disciplina também nos bons momentos.",
-        "story": "A dívida transforma a comemoração em preocupação."
-      }
-    ]
+const STRATEGIES=[
+ {title:'Executar um teste limitado, registrar custos e decidir depois',cost:320,sales:1160,expenses:750,rep:2,stock:1,team:0,risk:0,lesson:'Um teste diminui a exposição e produz evidências, mas pode reduzir a velocidade.',story:'Você ganha informação e preserva parte dos recursos, mas avança mais devagar.'},
+ {title:'Acelerar a operação com investimento elevado e expectativa de demanda',cost:1720,sales:2860,expenses:1150,rep:6,stock:-8,team:-6,risk:2,lesson:'Crescimento rápido pode aumentar faturamento e risco ao mesmo tempo.',story:'A empresa cresce rapidamente; compromissos e pressão sobre a equipe também crescem.'},
+ {title:'Negociar condições e dividir os investimentos em etapas',cost:670,sales:1630,expenses:860,rep:3,stock:2,team:1,risk:1,lesson:'Negociação e implantação gradual ajudam a preservar flexibilidade.',story:'A negociação exige tempo, mas cria uma alternativa intermediária.'},
+ {title:'Oferecer desconto para acelerar o volume, com menor margem por venda',cost:480,sales:2190,expenses:1740,rep:5,stock:-6,team:-4,risk:1,lesson:'Receita maior não significa lucro maior; avalie a margem de contribuição.',story:'As vendas aumentam, mas o custo de atendê-las consome boa parte da receita.'},
+ {title:'Priorizar qualidade, reserva e atendimento mesmo com menor volume',cost:220,sales:1250,expenses:790,rep:7,stock:3,team:4,risk:0,lesson:'Consolidar serviço e caixa pode fortalecer a empresa para desafios futuros.',story:'A reputação melhora lentamente, enquanto o crescimento imediato é contido.'}
+];
+const replace=(s,vars)=>s.replace(/\{(\w+)\}/g,(_,key)=>vars[key]||key);
+// 20 temporadas por setor × 10 setores = 200 campanhas procedurais jogáveis.
+// Os temas-base são reutilizados em temporadas com cenários e parâmetros distintos;
+// não são 20.000 capítulos escritos manualmente.
+const SEASON_ARCS=[
+ ['Primeiros clientes','Abertura e descoberta do público'],['O bairro muda','Posicionamento e concorrência'],
+ ['Crescer sem quebrar','Capital de giro e demanda'],['Novos talentos','Pessoas e liderança'],
+ ['Preço ou valor','Margens e diferenciação'],['Um rival poderoso','Concorrência e fidelização'],
+ ['Expansão cautelosa','Investimento e capacidade'],['Ano turbulento','Choques de custos e resiliência'],
+ ['O salto digital','Canais e processos digitais'],['Negócios em parceria','Fornecimento e contratos'],
+ ['Qualidade à prova','Controles e reclamações'],['Rumo à segunda unidade','Replicação e expansão'],
+ ['A crise de confiança','Reputação e recuperação'],['Decisões de crédito','Dívidas e financiamento'],
+ ['Talento e cultura','Gestão e produtividade'],['A batalha do caixa','Liquidez e rentabilidade'],
+ ['Mercados novos','Públicos e portfólio'],['Operação em escala','Processos e capacidade'],
+ ['O grande imprevisto','Continuidade e risco'],['Legado empreendedor','Estratégia e sustentabilidade']
+];
+const SECTOR_EVENTS={
+ cafeteria:['A máquina de espresso perde pressão','O fornecedor de leite muda a tabela','Uma avaliação viraliza no bairro','O movimento da manhã dispara','O bolo do dia sobra no balcão'],
+ restaurante:['O delivery chega frio','Uma reserva de grupo lota o salão','Os alimentos chegam fora da temperatura','O chef altera o cardápio','A fila do almoço cresce'],
+ roupas:['Uma coleção perde relevância','O estoque está sem tamanhos populares','A vitrine não atrai visitantes','Uma troca vira reclamação pública','A estação muda antes do esperado'],
+ supermercado:['Frutas amadurecem antes da venda','Há filas nos caixas de pagamento','Um produto essencial falta nas gôndolas','Os refrigeradores consomem mais energia','A validade de vários itens se aproxima'],
+ confeccao:['Uma máquina de costura para','O corte desperdiça tecido','A modelagem de um lote saiu errada','Um varejista pede uma coleção exclusiva','O prazo de entrega está apertado'],
+ tecnologia:['O servidor apresenta lentidão','Um cliente corporativo ameaça cancelar','O backlog cresce sem prioridade','Um bug afeta o faturamento','O custo de infraestrutura dispara'],
+ agro:['A previsão indica estiagem','O preço da semente sobe','A colheita pode atrasar','Uma praga ameaça parte da lavoura','O preço de venda no atacado recua'],
+ construcao:['A obra recebe pedido de alteração','O cimento atrasou no canteiro','O cronograma de entregas escorrega','A equipe identifica retrabalho','O orçamento de materiais estourou'],
+ logistica:['Um caminhão precisa de manutenção','Uma rota tem congestionamento frequente','Uma carga sofreu avaria','O preço do diesel sobe','O cliente exige rastreamento'],
+ franquias:['Uma unidade foge do padrão','O franqueado pede ajuda financeira','A rede lança um cardápio obrigatório','O fundo de marketing é contestado','Uma nova praça parece promissora']
+};
+function buildSeason(sector,seed,seasonNumber=1){
+ const s=SECTORS[sector],order=[],arc=SEASON_ARCS[seasonNumber-1]||SEASON_ARCS[0];
+ // Cada etapa tem 100 decisões; a ordem muda em cada partida e temporada.
+ // Não é uma árvore narrativa autoral completa, mas históricos e indicadores se acumulam.
+ const scenePool=THEMES.map(([title,scene,type])=>({title,scene,type}));
+ SECTOR_EVENTS[sector].forEach((title,i)=>scenePool.push({title,scene:`${title}. Você deve avaliar impacto sobre ${s.product}, equipe e capital de giro antes de agir.`,type:['Operação','Gestão','Risco','Mercado','Financeiro'][i]}));
+ let indices=Array.from({length:scenePool.length},(_,i)=>i);
+ shuffleWith(indices,seed+seasonNumber*313);
+ for(let cycle=0;cycle<4;cycle++){
+  for(let k=0;k<25;k++){
+   const number=order.length+1,entry=scenePool[indices[cycle*25+k]],demand=65+((seed*7+number*17+seasonNumber*11)%76);
+   const capital=1100+((seed*11+number*359+seasonNumber*41)%7200);
+   const variant=.66+((seed+number*13+seasonNumber*7)%71)/100;
+   const phase=['Preparação','Operação','Crescimento','Fechamento'][cycle];
+   const adversity=1+Math.max(0,seasonNumber-1)*.021;
+   const options=permute(STRATEGIES.map((o,i)=>({...o,id:i,title:o.title,cost:Math.round(o.cost*variant*adversity),sales:Math.round(o.sales*(demand/100)*(1+cycle*.08)),expenses:Math.round(o.expenses*(1+cycle*.12)*adversity),risk:o.risk})),seed+number*41+seasonNumber*83);
+   order.push({id:`${sector}-T${seasonNumber}-${number}`,title:entry.title,type:entry.type,
+    scene:`${replace(entry.scene,s)} ${arc[0]} — ${phase.toLowerCase()}. A demanda estimada equivale a ${demand}% da referência e há ${capital.toLocaleString('pt-BR')} reais em compromissos operacionais previstos. Seu histórico financeiro influencia a decisão.`,
+    options,demand,cycle:cycle+1});
   }
-]];
+ }
+ return order;
+}
+function shuffleWith(arr,seed){let x=(seed|0)||1;for(let i=arr.length-1;i>0;i--){x=(Math.imul(x,1664525)+1013904223)|0;const j=(x>>>0)%(i+1);[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function permute(a,seed){return shuffleWith(a,seed);}

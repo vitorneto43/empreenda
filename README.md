@@ -1,19 +1,28 @@
-# Empreenda! v0.4 — Histórias de Negócios
+# Empreenda! Beta 0.7 — contas, convites e compartilhamento
 
-Abra a pasta no VS Code e rode `index.html` com Live Server. Sem dependências, servidor ou conta.
+## O que funciona imediatamente
+- Preserva as **200 temporadas procedurais**, 100 decisões por temporada, cinco escolhas.
+- Jogo em modo visitante; cada navegador mantém seu progresso local.
+- Botões **Convidar no WhatsApp**, **Compartilhar placar** e **Planos** (prévia sem cobrança).
+- O link de convite aceita `?ref=...`, mas **não registra indicações automaticamente**.
 
-## O que mudou
-- Selecione cafeteria (40 capítulos), loja de roupas (16 capítulos) ou pequena confecção (16 capítulos).
-- Em cada nova partida, a ordem dos capítulos internos varia em blocos, as cinco opções A–E são embaralhadas, e o contexto narrativo / eventos variam.
-- As cinco escolhas têm compensações: crescimento, caixa, reputação, equipe, operação. O jogo não declara uma resposta certa única.
-- Escolhas alteram receita, caixa, resultado, reputação, equipe e operação; baixo desempenho pode diminuir vendas futuras.
-- Relatório de decisões, falência, e certificado demonstrativo ao concluir com caixa e resultado positivos.
+## Para ativar cadastro e login reais
+1. Crie um projeto no Supabase (https://supabase.com).
+2. SQL Editor: execute `supabase-schema.sql`; há políticas RLS que isolam o progresso de cada conta.
+3. Authentication > URL Configuration: defina **Site URL** para sua URL do GitHub Pages e inclua essa URL exata em Redirect URLs para confirmação por e-mail.
+4. Copie a **Project URL** e a chave pública **publishable/anon** para `config.js`. Nunca cole uma chave secreta ou `service_role` no projeto.
+5. Publique todos os arquivos via GitHub Pages (raiz, branch main).
+6. Faça um cadastro e confirme e-mail, se habilitado; entre em dois navegadores para validar.
 
-## Arquivos
-- `chapters.js`: 40 situações originais da cafeteria, mantidas.
-- `sectors.js`: setores novos, 16 situações por setor, alternativas e gerador de campanhas.
-- `app.js`: motor de decisão, estado, métricas, telas e certificados.
-- `style.css`: layout responsivo.
+## Limitações que você precisa saber
+- O modo visitante e o modo logado usam partidas separadas. Não há importação automática de progresso do visitante.
+- Conta autenticada sincroniza a última partida com o Supabase. Atualmente só há **uma partida ativa por conta**.
+- O placar compartilhado via WhatsApp é **texto da simulação**, sem selo de verificação. Não existe ranking público verificado.
+- A sincronização é uma versão inicial de teste: duas sessões simultâneas podem sobrescrever o progresso.
+- As 200 temporadas reutilizam banco de temas com geração procedural, não são 200 histórias autorais independentes.
+- O Premium **não aceita pagamentos ainda**. O preço de R$ 19,90 é hipótese para validar interesse.
+- Para placar público competitivo, benefícios de indicação e certificados oficiais, mover o cálculo decisório para servidor com validação antifraude.
+- A página carrega uma biblioteca JS pela CDN para usar Supabase; com a integração desligada, o jogo funciona como visitante.
 
-## Limitações transparentes
-Ainda é um protótipo. As narrativas têm variações controladas (não capítulos infinitos criados por IA). As 16 situações dos setores novos utilizam estratégias-modelo adaptadas; precisam de revisão pedagógica específica antes de publicação comercial. Não há autenticação, banco de dados, nomes no certificado nem validação pública. Investimentos estão simplificados no resultado acumulado; não há contabilidade formal, passivo real ou modelagem financeira regulatória. Ao começar outra empresa, o progresso da partida atual é substituído. Os dados da versão 0.3.1 não são importados automaticamente.
+## Como rodar
+Abra a pasta no VS Code e use a extensão Live Server. Publique todos os arquivos preservando nomes e caminhos.
