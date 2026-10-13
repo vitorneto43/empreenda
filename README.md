@@ -26,3 +26,11 @@
 
 ## Como rodar
 Abra a pasta no VS Code e use a extensão Live Server. Publique todos os arquivos preservando nomes e caminhos.
+
+
+## Beta 0.8 — Camada pedagógica
+- Após cada decisão: explicação das consequências, conceito, riscos, orientação e comparação das cinco alternativas.
+- Nenhuma escolha é rotulada como universalmente correta. Projeções da comparação são simplificadas e não incluem o estado completo da empresa.
+- Vídeos são futuros/opcionais: informe `window.EMPREENDA_VIDEOS = { "cafeteria-T1-1": "https://.../video.mp4" };` **antes** do script `app.js` para que vídeos próprios possam aparecer. O identificador deve coincidir com o id da situação.
+- Atenção: o conteúdo pedagógico atual ainda se baseia nas cinco estratégias genéricas; ampliar com explicações específicas por cenário é a próxima etapa editorial.
+- O salvamento, a conta Supabase e a estrutura procedural são preservados. Testar a migração com conta real antes de publicar.
