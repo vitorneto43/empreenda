@@ -1,1 +1,62 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#104638"><meta name="description" content="Empreenda! Simulador de gestão de pequenos negócios."><title>Empreenda! — Beta 0.9.1</title><link rel="stylesheet" href="style.css"></head><body><div id="app"></div><script src="config.js" defer></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js" defer></script><script src="sectors.js" defer></script><script src="chapters.js" defer></script><script src="finance.js" defer></script><script src="app.js" defer></script></body></html>
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+  <title>Empreenda! — Beta 0.9.1</title>
+
+  <meta name="theme-color" content="#104638">
+  <meta name="description"
+        content="Aprenda gestão empresarial jogando. Administre empresas virtuais, tome decisões e descubra suas consequências.">
+
+  <!-- Configuração da PWA -->
+  <link rel="manifest" href="./manifest.webmanifest">
+
+  <!-- Ícone do navegador -->
+  <link rel="icon" href="./icons/icon-192.png">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <!-- Configuração do Supabase -->
+  <script src="./config.js" defer></script>
+
+  <!-- Biblioteca Supabase -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+    defer>
+  </script>
+
+  <!-- Motor do jogo -->
+  <script src="./sectors.js" defer></script>
+  <script src="./chapters.js" defer></script>
+  <script src="./finance.js" defer></script>
+  <script src="./app.js" defer></script>
+
+  <!-- Registro do Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => {
+            console.log("Empreenda! PWA registrada.");
+          })
+          .catch((error) => {
+            console.error(
+              "Erro ao registrar Service Worker:",
+              error
+            );
+          });
+      });
+    }
+  </script>
+</body>
+</html>
