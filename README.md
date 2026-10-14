@@ -1,36 +1,32 @@
-# Empreenda! Beta 0.7 — contas, convites e compartilhamento
+# Empreenda! Beta 0.9 — Consequências Vivas
 
-## O que funciona imediatamente
-- Preserva as **200 temporadas procedurais**, 100 decisões por temporada, cinco escolhas.
-- Jogo em modo visitante; cada navegador mantém seu progresso local.
-- Botões **Convidar no WhatsApp**, **Compartilhar placar** e **Planos** (prévia sem cobrança).
-- O link de convite aceita `?ref=...`, mas **não registra indicações automaticamente**.
+Continuação incremental da Beta 0.8, mantendo 10 negócios, 20 temporadas procedurais por negócio, 100 decisões por temporada, cinco alternativas, explicações pedagógicas, autenticação opcional via Supabase e compartilhamento.
 
-## Para ativar cadastro e login reais
-1. Crie um projeto no Supabase (https://supabase.com).
-2. SQL Editor: execute `supabase-schema.sql`; há políticas RLS que isolam o progresso de cada conta.
-3. Authentication > URL Configuration: defina **Site URL** para sua URL do GitHub Pages e inclua essa URL exata em Redirect URLs para confirmação por e-mail.
-4. Copie a **Project URL** e a chave pública **publishable/anon** para `config.js`. Nunca cole uma chave secreta ou `service_role` no projeto.
-5. Publique todos os arquivos via GitHub Pages (raiz, branch main).
-6. Faça um cadastro e confirme e-mail, se habilitado; entre em dois navegadores para validar.
+## O que há de novo
 
-## Limitações que você precisa saber
-- O modo visitante e o modo logado usam partidas separadas. Não há importação automática de progresso do visitante.
-- Conta autenticada sincroniza a última partida com o Supabase. Atualmente só há **uma partida ativa por conta**.
-- O placar compartilhado via WhatsApp é **texto da simulação**, sem selo de verificação. Não existe ranking público verificado.
-- A sincronização é uma versão inicial de teste: duas sessões simultâneas podem sobrescrever o progresso.
-- As 200 temporadas reutilizam banco de temas com geração procedural, não são 200 histórias autorais independentes.
-- O Premium **não aceita pagamentos ainda**. O preço de R$ 19,90 é hipótese para validar interesse.
-- Para placar público competitivo, benefícios de indicação e certificados oficiais, mover o cálculo decisório para servidor com validação antifraude.
-- A página carrega uma biblioteca JS pela CDN para usar Supabase; com a integração desligada, o jogo funciona como visitante.
+- Arquivo separado `finance.js`: motor financeiro didático e fácil de manter.
+- Cada **cinco decisões** equivalem a **um mês** no calendário da empresa.
+- Escolhas de crédito podem contratar empréstimos com juros mensais, parcelas calculadas e saldo devedor até quitação.
+- Escolhas de pessoas podem contratar funcionários; salários são cobrados nos meses seguintes.
+- Investimentos em expansão/capacidade podem criar custo mensal de estrutura e manutenção.
+- Painel de dívidas, folha e manutenção; explicação ao fechar cada mês e no feedback de cada decisão.
+- Partidas antigas recebem inicialização compatível do livro financeiro quando abertas.
 
-## Como rodar
-Abra a pasta no VS Code e use a extensão Live Server. Publique todos os arquivos preservando nomes e caminhos.
+## Limitações importantes
 
+- O motor é **educativo**, não uma ferramenta de contabilidade ou planejamento financeiro real. Custos, empréstimos, salários e ciclos temporais são fictícios e simplificados.
+- As decisões ainda partem de cinco estratégias genéricas por situação. Nem todo empréstimo, contratação ou investimento tem um evento narrativo único a vários capítulos de distância; isso é trabalho futuro.
+- Os contratos são ativados por tipo de desafio e estratégia escolhida; os números são hipóteses didáticas. Folha e dívidas continuam sendo cobradas após a decisão original.
+- O cálculo ainda não tem imposto por regime, férias, multas, ativos depreciáveis ou juros de mora por insuficiência de caixa; a falta de dinheiro encerra a partida.
+- A aplicação ainda mantém só uma partida ativa por jogador; sessões simultâneas podem sobrescrever o progresso. O ranking ainda não é auditável pelo servidor.
+- Não substitua o `config.js` já configurado no seu repositório pela versão vazia deste pacote. Apenas valores públicos podem ficar nesse arquivo: **nunca secret/service_role**.
 
-## Beta 0.8 — Camada pedagógica
-- Após cada decisão: explicação das consequências, conceito, riscos, orientação e comparação das cinco alternativas.
-- Nenhuma escolha é rotulada como universalmente correta. Projeções da comparação são simplificadas e não incluem o estado completo da empresa.
-- Vídeos são futuros/opcionais: informe `window.EMPREENDA_VIDEOS = { "cafeteria-T1-1": "https://.../video.mp4" };` **antes** do script `app.js` para que vídeos próprios possam aparecer. O identificador deve coincidir com o id da situação.
-- Atenção: o conteúdo pedagógico atual ainda se baseia nas cinco estratégias genéricas; ampliar com explicações específicas por cenário é a próxima etapa editorial.
-- O salvamento, a conta Supabase e a estrutura procedural são preservados. Testar a migração com conta real antes de publicar.
+## Instalação
+
+1. Faça um backup da Beta 0.8 e dos dados em teste.
+2. Copie os arquivos da Beta 0.9 para a pasta do VS Code; **preserve o config.js existente**.
+3. Inicie com Live Server e teste como visitante primeiro.
+4. Faça cinco decisões e confira o fechamento mensal; jogue mais cinco e verifique custos recorrentes. Para gerar empréstimo, escolha uma alternativa de expansão ou negociação durante um desafio do tipo Crédito/Capital/Dívida.
+5. Teste cadastro e sincronização antes de substituir os arquivos públicos no GitHub Pages.
+
+Não há alterações necessárias no esquema SQL desta versão: o `game_state` JSON já comporta os campos novos.
