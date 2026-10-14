@@ -28,19 +28,19 @@
  "screenshots": [
     {
       "src": "./screenshots/desktop.png",
-      "sizes": "1280x720",
+      "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "src": "./screenshots/decisao.png",
-      "sizes": "1280x720",
+      "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
       "src": "./screenshots/aprendizado.png",
-      "sizes": "1280x720",
+      "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
     }
