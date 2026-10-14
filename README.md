@@ -30,3 +30,13 @@ Continuação incremental da Beta 0.8, mantendo 10 negócios, 20 temporadas proc
 5. Teste cadastro e sincronização antes de substituir os arquivos públicos no GitHub Pages.
 
 Não há alterações necessárias no esquema SQL desta versão: o `game_state` JSON já comporta os campos novos.
+
+## Correção 0.9.1 — alternativas específicas
+
+- Eliminadas as cinco respostas genéricas usadas em todas as questões.
+- Alternativas são formuladas conforme a categoria do desafio (preço, crédito, atendimento, pessoas, estoque, qualidade etc.).
+- Cenários financeiros variam por decisão e temporada; não existe uma letra sempre superior.
+- Mantidos login, progresso, contratos recorrentes e 200 temporadas geradas proceduralmente.
+- Limitação: o banco ainda reutiliza famílias de alternativas por categoria; não equivale a 20.000 problemas independentes revisados por especialistas. A avaliação pedagógica e os impactos financeiros são simplificados.
+
+Ao atualizar no GitHub, mantenha seu `config.js` configurado. Faça cópia de segurança e teste uma partida nova antes de substituir a versão pública.

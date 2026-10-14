@@ -104,13 +104,65 @@ const THEMES=[
  ['Os números não batem','A conciliação revela diferenças entre vendas registradas e recebidas.','Controles'],
  ['A sucessão do fornecedor','A empresa que fornece insumos essenciais mudou de gestão.','Fornecedores']
 ];
-const STRATEGIES=[
- {title:'Executar um teste limitado, registrar custos e decidir depois',cost:320,sales:1160,expenses:750,rep:2,stock:1,team:0,risk:0,lesson:'Um teste diminui a exposição e produz evidências, mas pode reduzir a velocidade.',story:'Você ganha informação e preserva parte dos recursos, mas avança mais devagar.'},
- {title:'Acelerar a operação com investimento elevado e expectativa de demanda',cost:1720,sales:2860,expenses:1150,rep:6,stock:-8,team:-6,risk:2,lesson:'Crescimento rápido pode aumentar faturamento e risco ao mesmo tempo.',story:'A empresa cresce rapidamente; compromissos e pressão sobre a equipe também crescem.'},
- {title:'Negociar condições e dividir os investimentos em etapas',cost:670,sales:1630,expenses:860,rep:3,stock:2,team:1,risk:1,lesson:'Negociação e implantação gradual ajudam a preservar flexibilidade.',story:'A negociação exige tempo, mas cria uma alternativa intermediária.'},
- {title:'Oferecer desconto para acelerar o volume, com menor margem por venda',cost:480,sales:2190,expenses:1740,rep:5,stock:-6,team:-4,risk:1,lesson:'Receita maior não significa lucro maior; avalie a margem de contribuição.',story:'As vendas aumentam, mas o custo de atendê-las consome boa parte da receita.'},
- {title:'Priorizar qualidade, reserva e atendimento mesmo com menor volume',cost:220,sales:1250,expenses:790,rep:7,stock:3,team:4,risk:0,lesson:'Consolidar serviço e caixa pode fortalecer a empresa para desafios futuros.',story:'A reputação melhora lentamente, enquanto o crescimento imediato é contido.'}
+// Em vez de cinco respostas universais, cada contexto usa verbos e soluções próprias.
+// IDs mantidos por perfil de risco para compatibilidade com finance.js.
+const DECISION_BANK={
+ 'Finanças':['Recalcular o fluxo de caixa e adiar os gastos opcionais','Usar a reserva disponível para resolver o problema já','Negociar vencimentos e reservar recursos para obrigações','Promover vendas com desconto para acelerar entradas','Reduzir despesas sem cortar atividades essenciais'],
+ 'Precificação':['Testar novo preço em uma pequena amostra de clientes','Reduzir preço agressivamente para tentar ganhar mercado','Renegociar custos antes de alterar a tabela','Oferecer combos com margem calculada e prazo definido','Manter preço e destacar qualidade e valor percebido'],
+ 'Compras':['Comprar lote piloto para medir qualidade e giro','Comprar o volume máximo para aproveitar o desconto','Negociar lotes e entregas menores com o fornecedor','Antecipar compras e oferecer promoções para girar estoque','Comprar apenas o necessário e manter caixa reservado'],
+ 'Atendimento':['Investigar o ocorrido e testar uma correção pontual','Prometer compensações amplas sem estimar os custos','Negociar solução individual e registrar o caso','Oferecer descontos aos clientes afetados com prazo definido','Corrigir o processo e comunicar prazos transparentes'],
+ 'Marketing':['Testar campanha pequena com métrica de conversão','Investir pesado em anúncios para acelerar alcance','Negociar pagamento por resultado e metas claras','Dar descontos patrocinados para estimular volume','Fortalecer atendimento e indicações antes de escalar anúncios'],
+ 'Pessoas':['Treinar a equipe atual e medir o ganho de produtividade','Contratar imediatamente vários profissionais','Contratar uma pessoa em etapas e acompanhar resultados','Oferecer bônus por metas objetivas de curto prazo','Reorganizar escalas e preservar o clima da equipe'],
+ 'Crédito':['Projetar prestações e testar alternativa sem nova dívida','Aceitar o financiamento maior para acelerar o plano','Negociar juros, garantias e valor menor de crédito','Usar a linha disponível para promover vendas imediatas','Amortizar compromissos existentes e preservar liquidez'],
+ 'Expansão':['Testar a demanda no novo mercado antes de abrir unidade','Abrir a unidade completa para capturar o mercado','Negociar locação flexível e expansão por etapas','Financiar inauguração com descontos para atrair fluxo','Fortalecer a unidade atual e expandir quando houver reserva'],
+ 'Qualidade':['Inspecionar amostra e rastrear a origem da falha','Substituir todo o lote imediatamente, sem diagnóstico','Negociar correção com fornecedor e controlar entregas','Oferecer descontos para escoar estoque seguro e aprovado','Suspender temporariamente o item afetado e corrigir processos'],
+ 'Estoque':['Auditar uma amostra e calcular o giro real','Comprar mais mercadoria para evitar falta futura','Negociar reposições menores e frequentes','Realizar promoção planejada de itens com baixo giro','Reorganizar inventário e definir estoque mínimo'],
+ 'Fornecedores':['Homologar fornecedor alternativo em lote de teste','Trocar de fornecedor imediatamente pelo menor preço','Negociar entregas fracionadas e cláusulas de atraso','Repassar parte do impacto ao preço com cautela','Manter fornecedor atual e formar estoque de contingência'],
+ 'Caixa':['Atualizar projeção diária de entradas e saídas','Usar todo o saldo para cobrir as despesas imediatas','Renegociar datas de pagamento e recebimento','Oferecer incentivo limitado para antecipação de vendas','Rever custos recorrentes e manter uma reserva mínima'],
+ 'Risco':['Fazer análise de impacto e iniciar piloto controlado','Assumir o risco para aproveitar a oportunidade agora','Negociar garantias e condições antes de avançar','Aplicar desconto para compensar o risco comercial','Priorizar controles internos e plano de contingência'],
+ 'Contratos':['Fazer contrato-piloto com escopo e prazo limitados','Aceitar integralmente para ganhar o cliente','Renegociar prazos, garantias e pagamento','Propor desconto por volume com contrapartidas claras','Recusar até comprovar capacidade e rentabilidade'],
+ 'Concorrência':['Pesquisar diferenciais dos concorrentes e testar resposta','Cortar preços em toda a loja imediatamente','Negociar custos para competir sem eliminar margem','Criar promoção limitada para produtos estratégicos','Focar fidelização e atendimento em clientes existentes'],
+ 'Investimentos':['Testar aluguel ou uso compartilhado antes de comprar','Comprar o equipamento completo imediatamente','Negociar financiamento e entrega por etapas','Comprar e compensar o custo com campanha de volume','Priorizar manutenção dos recursos atuais até ter reserva'],
+ 'Manutenção':['Fazer diagnóstico e manutenção preventiva direcionada','Substituir imediatamente todos os equipamentos','Negociar reparo com garantia e pagamento parcelado','Aumentar volume de vendas para pagar equipamento novo','Criar plano de contingência e manter peças críticas'],
+ 'Planejamento':['Revisar indicadores e experimentar uma ação pequena','Aplicar todo o orçamento no plano mais ambicioso','Dividir orçamento entre etapas com pontos de revisão','Elevar vendas com descontos para cumprir metas imediatas','Preservar caixa e consolidar os processos existentes'],
+ 'Negociação':['Simular margens e realizar uma contraproposta limitada','Aceitar os termos integralmente para fechar rápido','Negociar volume, prazo e garantia em conjunto','Conceder desconto em troca de pagamento antecipado','Recusar condições que comprometam o caixa'],
+ 'Demanda':['Medir mudança de procura antes de ajustar capacidade','Aumentar rapidamente toda a produção e estoque','Negociar equipe e insumos temporários','Fazer promoção limitada para nivelar a procura','Proteger caixa e priorizar itens com maior margem']
+};
+const TYPE_GROUP={
+ 'Financeiro':'Finanças','Custos':'Finanças','Custos fixos':'Finanças','Dívida':'Crédito','Capital':'Crédito','Gestão de pessoas':'Pessoas','Liderança':'Pessoas','Gestão':'Pessoas','Capacidade':'Expansão','Investimento':'Investimentos','Operação':'Manutenção','Operações':'Manutenção','Eficiência':'Qualidade','Conformidade':'Risco','Governança':'Contratos','Controles':'Qualidade','Cobrança':'Caixa','Sistemas':'Investimentos','Dados':'Planejamento','Mercado':'Demanda','Sazonalidade':'Demanda','Digital':'Marketing','Fidelização':'Atendimento','Aquisição':'Marketing','Produto':'Precificação','Portfólio':'Precificação','Vendas':'Negociação','Logística':'Fornecedores','Pesquisa':'Demanda','Estratégia':'Planejamento','Parcerias':'Contratos','Localização':'Expansão','Continuidade':'Risco','Inovação':'Investimentos','Controle':'Estoque','Risco':'Risco','Crédito':'Crédito'
+};
+const PROFILES=[
+ {id:0,risk:0,cost:250,sales:1100,expenses:720,rep:2,stock:1,team:1},
+ {id:1,risk:2,cost:1800,sales:2500,expenses:1320,rep:5,stock:-6,team:-5},
+ {id:2,risk:1,cost:650,sales:1550,expenses:850,rep:3,stock:2,team:2},
+ {id:3,risk:1,cost:480,sales:2100,expenses:1690,rep:4,stock:-4,team:-3},
+ {id:4,risk:0,cost:200,sales:1190,expenses:780,rep:6,stock:4,team:3}
 ];
+function decisionOptions(entry,s,seed,number,seasonNumber,cycle,demand,adversity){
+ const group=DECISION_BANK[entry.type]?entry.type:(TYPE_GROUP[entry.type]||'Planejamento');
+ const actions=DECISION_BANK[group];
+ const source=(Math.imul(seed+seasonNumber*67+number*113,1664525)>>>0);
+ const volatility=(source%101)/100;
+ return PROFILES.map((profile,i)=>{
+  const tilt=.8+((source>>>((i*5)%24))%55)/100;
+  const demandFit=(i===1?demand/100:i===3?1.2-demand/250:i===4?.8+demand/500:1);
+  const scenarioCost=Math.round(profile.cost*(.8+volatility*.7)*adversity*tilt);
+  const revenue=Math.round(profile.sales*demandFit*(.7+volatility*.5)*(1+cycle*.055));
+  const running=Math.round(profile.expenses*(.85+(1-volatility)*.4)*(1+cycle*.09)*adversity);
+  const context=replace(entry.title.toLowerCase(),s);
+  const complements=[`para resolver ${context}`,`diante de ${context}`,`no contexto de ${context}`,`para reagir a ${context}`,`considerando ${context}`];
+  const decision=`${replace(actions[i],s)} — ${complements[i]}`;
+  const story=`Sobre ${context}, você decidiu: ${decision.toLowerCase()}. A mudança afeta vendas, custos e a capacidade de reação nos períodos seguintes.`;
+  const lesson=[
+    `Em ${context}, testar antes de comprometer recursos protege o caixa, mas pode atrasar oportunidades.`,
+    `Em ${context}, crescer rápido aumenta a exposição: uma demanda menor que o previsto pode pressionar o pagamento de salários e dívidas.`,
+    `Em ${context}, negociar prazo, garantia e custo distribui riscos, mas requer acompanhar vencimentos.`,
+    `Em ${context}, vender mais ou dar descontos não garante lucro: compare margem e necessidade de capital de giro.`,
+    `Em ${context}, preservar liquidez e qualidade reduz alguns riscos, mas também pode limitar expansão e participação de mercado.`
+  ][i];
+  return {...profile,title:decision,story,lesson,cost:scenarioCost,sales:revenue,expenses:running};
+ });
+}
 const replace=(s,vars)=>s.replace(/\{(\w+)\}/g,(_,key)=>vars[key]||key);
 // 20 temporadas por setor × 10 setores = 200 campanhas procedurais jogáveis.
 // Os temas-base são reutilizados em temporadas com cenários e parâmetros distintos;
@@ -154,7 +206,7 @@ function buildSeason(sector,seed,seasonNumber=1){
    const variant=.66+((seed+number*13+seasonNumber*7)%71)/100;
    const phase=['Preparação','Operação','Crescimento','Fechamento'][cycle];
    const adversity=1+Math.max(0,seasonNumber-1)*.021;
-   const options=permute(STRATEGIES.map((o,i)=>({...o,id:i,title:o.title,cost:Math.round(o.cost*variant*adversity),sales:Math.round(o.sales*(demand/100)*(1+cycle*.08)),expenses:Math.round(o.expenses*(1+cycle*.12)*adversity),risk:o.risk})),seed+number*41+seasonNumber*83);
+   const options=permute(decisionOptions(entry,s,seed,number,seasonNumber,cycle,demand,adversity),seed+number*41+seasonNumber*83);
    order.push({id:`${sector}-T${seasonNumber}-${number}`,title:entry.title,type:entry.type,
     scene:`${replace(entry.scene,s)} ${arc[0]} — ${phase.toLowerCase()}. A demanda estimada equivale a ${demand}% da referência e há ${capital.toLocaleString('pt-BR')} reais em compromissos operacionais previstos. Seu histórico financeiro influencia a decisão.`,
     options,demand,cycle:cycle+1});
